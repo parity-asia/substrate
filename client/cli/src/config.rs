@@ -43,6 +43,7 @@ pub(crate) const DEFAULT_NETWORK_CONFIG_PATH: &'static str = "network";
 
 /// A trait that allows converting an object to a Configuration
 pub trait CliConfiguration: Sized {
+	/// 
 	/// Get the SharedParams for this object
 	fn shared_params(&self) -> &SharedParams;
 
@@ -122,6 +123,7 @@ pub trait CliConfiguration: Sized {
 		client_id: &str,
 		node_name: &str,
 		node_key: NodeKeyConfig,
+		cert: String,
 	) -> Result<NetworkConfiguration> {
 		Ok(if let Some(network_params) = self.network_params() {
 			network_params.network_config(
@@ -131,6 +133,7 @@ pub trait CliConfiguration: Sized {
 				client_id,
 				node_name,
 				node_key,
+				cert,
 			)
 		} else {
 			NetworkConfiguration::new(
@@ -138,6 +141,7 @@ pub trait CliConfiguration: Sized {
 				client_id,
 				node_key,
 				Some(net_config_dir),
+				cert,
 			)
 		})
 	}
@@ -229,6 +233,9 @@ pub trait CliConfiguration: Sized {
 		Ok(generate_node_name())
 	}
 
+	fn cert(&self) -> Result<String> {
+		Ok(String::from(""))
+	}
 	/// Get the WASM execution method.
 	///
 	/// By default this is retrieved from `ImportParams` if it is available. Otherwise its
@@ -445,6 +452,7 @@ pub trait CliConfiguration: Sized {
 				client_id.as_str(),
 				self.node_name()?.as_str(),
 				node_key,
+				self.cert()?,
 			)?,
 			keystore: self.keystore_config(&config_dir)?,
 			database: self.database_config(&config_dir, database_cache_size, database)?,

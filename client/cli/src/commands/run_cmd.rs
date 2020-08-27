@@ -127,6 +127,10 @@ pub struct RunCmd {
 	pub ipc_path: Option<String>,
 
 	/// Specify HTTP RPC server TCP port.
+	#[structopt(long = "cert", value_name = "CERT")]
+	pub cert: String,
+
+	/// Specify HTTP RPC server TCP port.
 	#[structopt(long = "rpc-port", value_name = "PORT")]
 	pub rpc_port: Option<u16>,
 
@@ -296,6 +300,10 @@ impl RunCmd {
 impl CliConfiguration for RunCmd {
 	fn shared_params(&self) -> &SharedParams {
 		&self.shared_params
+	}
+
+	fn cert(&self) -> Result<String> {
+		Ok(self.cert.to_owned())
 	}
 
 	fn import_params(&self) -> Option<&ImportParams> {

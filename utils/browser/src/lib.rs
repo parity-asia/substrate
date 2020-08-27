@@ -51,6 +51,7 @@ where
 		"unknown",
 		Default::default(),
 		None,
+		Default::default(),
 	);
 	network.boot_nodes = chain_spec.boot_nodes().to_vec();
 	network.transport = TransportConfig::Normal {

@@ -195,11 +195,12 @@ macro_rules! substrate_cli_subcommands {
 				client_id: &str,
 				node_name: &str,
 				node_key: ::sc_service::config::NodeKeyConfig,
+				cert: String,
 			) -> $crate::Result<::sc_service::config::NetworkConfiguration> {
 				match self {
 					$(
 						$enum::$variant(cmd) => cmd.network_config(
-							chain_spec, is_dev, net_config_dir, client_id, node_name, node_key
+							chain_spec, is_dev, net_config_dir, client_id, node_name, node_key, cert
 						)
 					),*
 				}
@@ -319,6 +320,13 @@ macro_rules! substrate_cli_subcommands {
 			-> $crate::Result<::std::option::Option<::std::vec::Vec<String>>> {
 				match self {
 					$($enum::$variant(cmd) => cmd.rpc_cors(is_dev)),*
+				}
+			}
+
+			fn cert(&self)
+			-> $crate::Result<String> {
+				match self {
+					$($enum::$variant(cmd) => cmd.cert()),*
 				}
 			}
 
