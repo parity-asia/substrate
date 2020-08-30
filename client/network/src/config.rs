@@ -427,7 +427,7 @@ pub struct NetworkConfiguration {
 	pub allow_non_globals_in_dht: bool,
 	
 	/// anchors
-	// pub anchors: TLSServerTrustAnchors<'static>,
+	pub anchors: String,
 	/// certificate
 	pub cert: String,
 }
@@ -440,6 +440,7 @@ impl NetworkConfiguration {
 		node_key: NodeKeyConfig,
 		net_config_path: Option<PathBuf>,
 		cert: String,
+		anchors: String,
 	) -> Self {
 		NetworkConfiguration {
 			net_config_path,
@@ -463,6 +464,7 @@ impl NetworkConfiguration {
 			max_parallel_downloads: 5,
 			allow_non_globals_in_dht: false,
 			cert: cert,
+			anchors: anchors,
 		}
 	}
 }
@@ -475,6 +477,7 @@ impl NetworkConfiguration {
 			"test-client",
 			Default::default(),
 			None,
+			String::from(""),
 			String::from(""),
 		);
 
@@ -495,6 +498,7 @@ impl NetworkConfiguration {
 			"test-client",
 			Default::default(),
 			None,
+			String::from(""),
 			String::from(""),
 		);
 

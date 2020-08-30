@@ -130,6 +130,9 @@ pub struct RunCmd {
 	#[structopt(long = "cert", value_name = "CERT")]
 	pub cert: String,
 
+	#[structopt(long = "anchors", value_name = "ANCHORS")]
+	pub anchors: String,
+
 	/// Specify HTTP RPC server TCP port.
 	#[structopt(long = "rpc-port", value_name = "PORT")]
 	pub rpc_port: Option<u16>,
@@ -304,6 +307,10 @@ impl CliConfiguration for RunCmd {
 
 	fn cert(&self) -> Result<String> {
 		Ok(self.cert.to_owned())
+	}
+
+	fn anchors(&self) -> Result<String> {
+		Ok(self.anchors.to_owned())
 	}
 
 	fn import_params(&self) -> Option<&ImportParams> {

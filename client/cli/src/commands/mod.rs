@@ -196,11 +196,12 @@ macro_rules! substrate_cli_subcommands {
 				node_name: &str,
 				node_key: ::sc_service::config::NodeKeyConfig,
 				cert: String,
+				anchors: String,
 			) -> $crate::Result<::sc_service::config::NetworkConfiguration> {
 				match self {
 					$(
 						$enum::$variant(cmd) => cmd.network_config(
-							chain_spec, is_dev, net_config_dir, client_id, node_name, node_key, cert
+							chain_spec, is_dev, net_config_dir, client_id, node_name, node_key, cert, anchors
 						)
 					),*
 				}
@@ -327,6 +328,13 @@ macro_rules! substrate_cli_subcommands {
 			-> $crate::Result<String> {
 				match self {
 					$($enum::$variant(cmd) => cmd.cert()),*
+				}
+			}
+
+			fn anchors(&self)
+			-> $crate::Result<String> {
+				match self {
+					$($enum::$variant(cmd) => cmd.anchors()),*
 				}
 			}
 

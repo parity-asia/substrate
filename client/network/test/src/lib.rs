@@ -660,6 +660,7 @@ pub trait TestNetFactory: Sized {
 			Default::default(),
 			None,
 			Default::default(),
+			Default::default(),
 		);
 		network_config.transport = TransportConfig::MemoryOnly;
 		network_config.listen_addresses = vec![listen_addr.clone()];
@@ -740,6 +741,7 @@ pub trait TestNetFactory: Sized {
 			"test-client",
 			Default::default(),
 			None,
+			Default::default(),
 			Default::default(),
 		);
 		network_config.transport = TransportConfig::MemoryOnly;

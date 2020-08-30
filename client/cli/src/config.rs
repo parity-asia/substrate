@@ -124,6 +124,7 @@ pub trait CliConfiguration: Sized {
 		node_name: &str,
 		node_key: NodeKeyConfig,
 		cert: String,
+		anchors: String,
 	) -> Result<NetworkConfiguration> {
 		Ok(if let Some(network_params) = self.network_params() {
 			network_params.network_config(
@@ -134,6 +135,7 @@ pub trait CliConfiguration: Sized {
 				node_name,
 				node_key,
 				cert,
+				anchors,
 			)
 		} else {
 			NetworkConfiguration::new(
@@ -142,6 +144,7 @@ pub trait CliConfiguration: Sized {
 				node_key,
 				Some(net_config_dir),
 				cert,
+				anchors,
 			)
 		})
 	}
@@ -234,6 +237,10 @@ pub trait CliConfiguration: Sized {
 	}
 
 	fn cert(&self) -> Result<String> {
+		Ok(String::from(""))
+	}
+
+	fn anchors(&self) -> Result<String> {
 		Ok(String::from(""))
 	}
 	/// Get the WASM execution method.
@@ -453,6 +460,7 @@ pub trait CliConfiguration: Sized {
 				self.node_name()?.as_str(),
 				node_key,
 				self.cert()?,
+				self.anchors()?,
 			)?,
 			keystore: self.keystore_config(&config_dir)?,
 			database: self.database_config(&config_dir, database_cache_size, database)?,

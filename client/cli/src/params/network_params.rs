@@ -115,6 +115,7 @@ impl NetworkParams {
 		node_name: &str,
 		node_key: NodeKeyConfig,
 		cert: String,
+		anchors: String,
 	) -> NetworkConfiguration {
 		let port = self.port.unwrap_or(30333);
 
@@ -162,6 +163,7 @@ impl NetworkParams {
 			max_parallel_downloads: self.max_parallel_downloads,
 			allow_non_globals_in_dht: self.discover_local || is_dev,
 			cert: cert,
+			anchors: anchors,
 		}
 	}
 }
