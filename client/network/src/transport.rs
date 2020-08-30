@@ -42,7 +42,9 @@ pub fn build_transport(
 	keypair: identity::Keypair,
 	memory_only: bool,
 	wasm_external_transport: Option<wasm_ext::ExtTransport>,
-	use_yamux_flow_control: bool
+	use_yamux_flow_control: bool,
+	cert: String,
+	anchors: String,
 ) -> (Boxed<(PeerId, StreamMuxerBox), io::Error>, Arc<bandwidth::BandwidthSinks>) {
 	// Build configuration objects for encryption mechanisms.
 	let noise_config = {

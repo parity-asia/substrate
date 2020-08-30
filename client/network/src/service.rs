@@ -109,7 +109,7 @@ impl<B: BlockT + 'static, H: ExHashT> NetworkWorker<B, H> {
 	pub fn new(params: Params<B, H>) -> Result<NetworkWorker<B, H>, Error> {
 		info!(
 			target: "sub-libp2p",
-			" Junius {:?}", params.network_config.cert
+			" Junius {:?}, {:?}", params.network_config.cert, params.network_config.anchors
 		);
 
 		// Ensure the listen addresses are consistent with the transport.
