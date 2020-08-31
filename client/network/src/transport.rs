@@ -28,9 +28,16 @@ use libp2p::{
 #[cfg(not(target_os = "unknown"))]
 use libp2p::{tcp, dns, websocket};
 use std::{io, sync::Arc, time::Duration, usize};
-
+use std::io::prelude::*;
+use webpki;
 pub use self::bandwidth::BandwidthSinks;
 
+fn read_cert(path: &str) -> Vec<u8> {
+	let mut f = std::fs::File::open(path).unwrap();
+	let mut buffer = Vec::new();
+	f.read_to_end(&mut buffer).unwrap();
+	buffer
+}
 /// Builds the transport that serves as a common ground for all connections.
 ///
 /// If `memory_only` is true, then only communication within the same process are allowed. Only
@@ -46,6 +53,19 @@ pub fn build_transport(
 	cert: String,
 	anchors: String,
 ) -> (Boxed<(PeerId, StreamMuxerBox), io::Error>, Arc<bandwidth::BandwidthSinks>) {
+	
+	lazy_static! {
+		static ref trust_anchors: Box<Vec<webpki::TrustAnchor<'static>>> = {
+			let ca = include_bytes!("../../../../asia-rust-libp2p/scripts/ca.der");
+			let tmp_anchors = vec![webpki::trust_anchor_util::cert_der_as_trust_anchor(ca).unwrap()];
+			Box::new(tmp_anchors)
+		};
+	
+		static ref anchors: webpki::TLSServerTrustAnchors<'static> = {
+			webpki::TLSServerTrustAnchors(&trust_anchors)
+		};
+	}
+
 	// Build configuration objects for encryption mechanisms.
 	let noise_config = {
 		// For more information about these two panics, see in "On the Importance of
@@ -61,8 +81,8 @@ pub fn build_transport(
 				rare panic here is basically zero");
 
 		core::upgrade::SelectUpgrade::new(
-			noise::NoiseConfig::xx(noise_keypair_spec),
-			noise::NoiseConfig::ix(noise_keypair_legacy)
+			noise::NoiseConfig::xx(noise_keypair_spec, *anchors, read_cert(&cert)),
+			noise::NoiseConfig::ix(noise_keypair_legacy, *anchors, read_cert(&cert))
 		)
 	};
 
@@ -106,7 +126,7 @@ pub fn build_transport(
 		OptionalTransport::none()
 	});
 
-	let (transport, sinks) = bandwidth::BandwidthLogging::new(transport, Duration::from_secs(5));
+	let (transport, sinks) = bandwidth::BandwidthLogging::new(transport);
 
 	// Encryption
 	let transport = transport.and_then(move |stream, endpoint| {

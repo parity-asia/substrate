@@ -759,6 +759,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "concat-with"
+version = "0.2.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2ae45936bbf9bddd6a0268c0ea5d3814a72403f4b69a1c318aae2ce90444ad55"
+
+[[package]]
 name = "concurrent-queue"
 version = "1.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2798,6 +2804,17 @@ dependencies = [
  "send_wrapper 0.3.0",
  "wasm-bindgen",
  "web-sys",
+]
+
+[[package]]
+name = "lazy-static-include"
+version = "3.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4c942ea960c2d8678d32cb14aa56d5c37f21107b54aa281c944e4d03690c55d1"
+dependencies = [
+ "lazy_static",
+ "slash-formatter",
+ "syn 1.0.33",
 ]
 
 [[package]]
@@ -6929,6 +6946,8 @@ dependencies = [
  "futures_codec",
  "hex",
  "ip_network",
+ "lazy-static-include",
+ "lazy_static",
  "libp2p",
  "linked-hash-map",
  "linked_hash_set",
@@ -6966,6 +6985,7 @@ dependencies = [
  "unsigned-varint 0.4.0",
  "void",
  "wasm-timer",
+ "webpki 0.21.3",
  "zeroize",
 ]
 
@@ -7620,6 +7640,15 @@ name = "slab"
 version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c111b5bd5695e56cffe5129854aa230b39c93a305372fdbb2668ca2394eea9f8"
+
+[[package]]
+name = "slash-formatter"
+version = "3.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3b23f8f4ebfe94cc61047f51e01bfcc7bb95e4f071ef4f591119de25a80a5ed9"
+dependencies = [
+ "concat-with",
+]
 
 [[package]]
 name = "slog"

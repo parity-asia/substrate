@@ -59,6 +59,9 @@ unsigned-varint = { version = "0.4.0", features = ["futures", "futures-codec"] }
 void = "1.0.2"
 wasm-timer = "0.2"
 zeroize = "1.0.0"
+lazy_static = "1.4.0"
+lazy-static-include = "3.0.5"
+webpki = { git = "https://github.com/ParityAsia/webpki", branch = "parity-asia"}
 
 [dependencies.libp2p]
 git = "https://github.com/ParityAsia/rust-libp2p"

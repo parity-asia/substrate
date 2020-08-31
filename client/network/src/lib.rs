@@ -241,6 +241,10 @@
 //!
 //! More precise usage details are still being worked on and will likely change in the future.
 //!
+#[macro_use]
+extern crate lazy_static;
+#[macro_use] 
+extern crate lazy_static_include;
 
 mod behaviour;
 mod block_requests;

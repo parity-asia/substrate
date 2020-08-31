@@ -316,7 +316,8 @@ impl<B: BlockT + 'static, H: ExHashT> NetworkWorker<B, H> {
 					TransportConfig::Normal { wasm_external_transport, use_yamux_flow_control, .. } =>
 						(false, wasm_external_transport, use_yamux_flow_control)
 				};
-				transport::build_transport(local_identity, config_mem, config_wasm, flowctrl)
+				transport::build_transport(local_identity, config_mem, config_wasm, flowctrl,
+					params.network_config.cert, params.network_config.anchors)
 			};
 			let mut builder = SwarmBuilder::new(transport, behaviour, local_peer_id.clone())
 				.peer_connection_limit(crate::MAX_CONNECTIONS_PER_PEER)
@@ -376,12 +377,12 @@ impl<B: BlockT + 'static, H: ExHashT> NetworkWorker<B, H> {
 
 	/// Returns the downloaded bytes per second averaged over the past few seconds.
 	pub fn average_download_per_sec(&self) -> u64 {
-		self.service.bandwidth.average_download_per_sec()
+		self.service.bandwidth.total_inbound()
 	}
 
 	/// Returns the uploaded bytes per second averaged over the past few seconds.
 	pub fn average_upload_per_sec(&self) -> u64 {
-		self.service.bandwidth.average_upload_per_sec()
+		self.service.bandwidth.total_outbound()
 	}
 
 	/// Returns the number of peers we're connected to.
@@ -513,8 +514,8 @@ impl<B: BlockT + 'static, H: ExHashT> NetworkWorker<B, H> {
 			peer_id: Swarm::<B, H>::local_peer_id(&swarm).to_base58(),
 			listened_addresses: Swarm::<B, H>::listeners(&swarm).cloned().collect(),
 			external_addresses: Swarm::<B, H>::external_addresses(&swarm).cloned().collect(),
-			average_download_per_sec: self.service.bandwidth.average_download_per_sec(),
-			average_upload_per_sec: self.service.bandwidth.average_upload_per_sec(),
+			average_download_per_sec: self.service.bandwidth.total_inbound(),
+			average_upload_per_sec: self.service.bandwidth.total_outbound(),
 			connected_peers,
 			not_connected_peers,
 			peerset: swarm.user_protocol_mut().peerset_debug_info(),
@@ -1270,7 +1271,7 @@ impl<B: BlockT + 'static, H: ExHashT> Future for NetworkWorker<B, H> {
 							ConnectedPoint::Dialer { .. } => "out",
 							ConnectedPoint::Listener { .. } => "in",
 						};
-						let reason = match cause {
+						let reason = match cause.unwrap() {
 							ConnectionError::IO(_) => "transport-error",
 							ConnectionError::Handler(NodeHandlerWrapperError::Handler(EitherError::A(EitherError::A(
 								EitherError::A(EitherError::A(EitherError::B(
@@ -1408,8 +1409,8 @@ impl<B: BlockT + 'static, H: ExHashT> Future for NetworkWorker<B, H> {
 		this.is_major_syncing.store(is_major_syncing, Ordering::Relaxed);
 
 		if let Some(metrics) = this.metrics.as_ref() {
-			metrics.network_per_sec_bytes.with_label_values(&["in"]).set(this.service.bandwidth.average_download_per_sec());
-			metrics.network_per_sec_bytes.with_label_values(&["out"]).set(this.service.bandwidth.average_upload_per_sec());
+			metrics.network_per_sec_bytes.with_label_values(&["in"]).set(this.service.bandwidth.total_inbound());
+			metrics.network_per_sec_bytes.with_label_values(&["out"]).set(this.service.bandwidth.total_outbound());
 			metrics.is_major_syncing.set(is_major_syncing as u64);
 			for (proto, num_entries) in this.network_service.num_kbuckets_entries() {
 				let proto = maybe_utf8_bytes_to_string(proto.as_bytes());
