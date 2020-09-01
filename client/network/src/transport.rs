@@ -56,7 +56,7 @@ pub fn build_transport(
 	
 	lazy_static! {
 		static ref trust_anchors: Box<Vec<webpki::TrustAnchor<'static>>> = {
-			let ca = include_bytes!("../../../../asia-rust-libp2p/scripts/ca.der");
+			let ca = include_bytes!("../../../scripts/ca.der");
 			let tmp_anchors = vec![webpki::trust_anchor_util::cert_der_as_trust_anchor(ca).unwrap()];
 			Box::new(tmp_anchors)
 		};
