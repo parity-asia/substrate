@@ -2872,7 +2872,7 @@ checksum = "c7d73b3f436185384286bd8098d17ec07c9a7d2388a6599f824d8502b529702a"
 [[package]]
 name = "libp2p"
 version = "0.23.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "atomic",
  "bytes 0.5.4",
@@ -2912,7 +2912,7 @@ dependencies = [
 [[package]]
 name = "libp2p-core"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "asn1_der",
  "bs58",
@@ -2945,7 +2945,7 @@ dependencies = [
 [[package]]
 name = "libp2p-core-derive"
 version = "0.20.2"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "quote 1.0.6",
  "syn 1.0.33",
@@ -2954,7 +2954,7 @@ dependencies = [
 [[package]]
 name = "libp2p-deflate"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "flate2",
  "futures 0.3.5",
@@ -2964,7 +2964,7 @@ dependencies = [
 [[package]]
 name = "libp2p-dns"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "futures 0.3.5",
  "libp2p-core",
@@ -2974,7 +2974,7 @@ dependencies = [
 [[package]]
 name = "libp2p-floodsub"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "cuckoofilter",
  "fnv",
@@ -2990,7 +2990,7 @@ dependencies = [
 [[package]]
 name = "libp2p-gossipsub"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "base64 0.11.0",
  "byteorder 1.3.4",
@@ -3015,7 +3015,7 @@ dependencies = [
 [[package]]
 name = "libp2p-identify"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "futures 0.3.5",
  "libp2p-core",
@@ -3030,7 +3030,7 @@ dependencies = [
 [[package]]
 name = "libp2p-kad"
 version = "0.22.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "arrayvec 0.5.1",
  "bytes 0.5.4",
@@ -3056,7 +3056,7 @@ dependencies = [
 [[package]]
 name = "libp2p-mdns"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "async-std",
  "data-encoding",
@@ -3077,7 +3077,7 @@ dependencies = [
 [[package]]
 name = "libp2p-mplex"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "bytes 0.5.4",
  "fnv",
@@ -3092,7 +3092,7 @@ dependencies = [
 [[package]]
 name = "libp2p-noise"
 version = "0.23.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "bytes 0.5.4",
  "curve25519-dalek",
@@ -3114,7 +3114,7 @@ dependencies = [
 [[package]]
 name = "libp2p-ping"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "futures 0.3.5",
  "libp2p-core",
@@ -3128,7 +3128,7 @@ dependencies = [
 [[package]]
 name = "libp2p-plaintext"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "bytes 0.5.4",
  "futures 0.3.5",
@@ -3145,7 +3145,7 @@ dependencies = [
 [[package]]
 name = "libp2p-pnet"
 version = "0.19.1"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "futures 0.3.5",
  "log",
@@ -3158,7 +3158,7 @@ dependencies = [
 [[package]]
 name = "libp2p-request-response"
 version = "0.2.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "async-trait",
  "futures 0.3.5",
@@ -3171,7 +3171,7 @@ dependencies = [
 [[package]]
 name = "libp2p-secio"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "aes-ctr",
  "ctr",
@@ -3200,7 +3200,7 @@ dependencies = [
 [[package]]
 name = "libp2p-swarm"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "futures 0.3.5",
  "libp2p-core",
@@ -3214,7 +3214,7 @@ dependencies = [
 [[package]]
 name = "libp2p-tcp"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "async-std",
  "futures 0.3.5",
@@ -3229,7 +3229,7 @@ dependencies = [
 [[package]]
 name = "libp2p-uds"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "async-std",
  "futures 0.3.5",
@@ -3240,7 +3240,7 @@ dependencies = [
 [[package]]
 name = "libp2p-wasm-ext"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "futures 0.3.5",
  "js-sys",
@@ -3253,7 +3253,7 @@ dependencies = [
 [[package]]
 name = "libp2p-websocket"
 version = "0.22.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "async-tls",
  "either",
@@ -3272,7 +3272,7 @@ dependencies = [
 [[package]]
 name = "libp2p-yamux"
 version = "0.21.0"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "futures 0.3.5",
  "libp2p-core",
@@ -3606,7 +3606,7 @@ checksum = "d8883adfde9756c1d30b0f519c9b8c502a94b41ac62f696453c37c7fc0a958ce"
 [[package]]
 name = "multistream-select"
 version = "0.8.2"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "bytes 0.5.4",
  "futures 0.3.5",
@@ -5152,7 +5152,7 @@ dependencies = [
 [[package]]
 name = "parity-multiaddr"
 version = "0.9.1"
-source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#d5270540216b113234c94f31c3caa59959992d05"
+source = "git+https://github.com/ParityAsia/rust-libp2p?branch=ca-support#92a4f20a9a1dd28b3374a1e0fbd837bda51e9346"
 dependencies = [
  "arrayref",
  "bs58",
