@@ -109,7 +109,7 @@ pub enum NotifsInHandlerOut {
 impl NotifsInHandlerProto {
 	/// Builds a new `NotifsInHandlerProto`.
 	pub fn new(
-		protocol_name: impl Into<Cow<'static, [u8]>>
+		protocol_name: impl Into<Cow<'static, str>>
 	) -> Self {
 		NotifsInHandlerProto {
 			in_protocol: NotificationsIn::new(protocol_name),
@@ -136,7 +136,7 @@ impl IntoProtocolsHandler for NotifsInHandlerProto {
 
 impl NotifsInHandler {
 	/// Returns the name of the protocol that we accept.
-	pub fn protocol_name(&self) -> &[u8] {
+	pub fn protocol_name(&self) -> &Cow<'static, str> {
 		self.in_protocol.protocol_name()
 	}
 }
@@ -163,11 +163,9 @@ impl ProtocolsHandler for NotifsInHandler {
 		}
 
 		// Note that we drop the existing substream, which will send an equivalent to a TCP "RST"
-		// to the remote and force-close the substream. It  might seem like an unclean way to get
+		// to the remote and force-close the substream. It might seem like an unclean way to get
 		// rid of a substream. However, keep in mind that it is invalid for the remote to open
-		// multiple such substreams, and therefore sending a "RST" is the correct thing to do.
-		// Also note that we have already closed our writing side during the initial handshake,
-		// and we can't close "more" than that anyway.
+		// multiple such substreams, and therefore sending a "RST" is not an incorrect thing to do.
 		self.substream = Some(proto);
 
 		self.events_queue.push_back(ProtocolsHandlerEvent::Custom(NotifsInHandlerOut::OpenRequest(msg)));

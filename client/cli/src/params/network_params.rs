@@ -114,10 +114,11 @@ impl NetworkParams {
 		client_id: &str,
 		node_name: &str,
 		node_key: NodeKeyConfig,
+		default_listen_port: u16,
 		cert: String,
 		anchors: String,
 	) -> NetworkConfiguration {
-		let port = self.port.unwrap_or(30333);
+		let port = self.port.unwrap_or(default_listen_port);
 
 		let listen_addresses = if self.listen_addr.is_empty() {
 			vec![
@@ -149,6 +150,7 @@ impl NetworkParams {
 			listen_addresses,
 			public_addresses,
 			notifications_protocols: Vec::new(),
+			request_response_protocols: Vec::new(),
 			node_key,
 			node_name: node_name.to_string(),
 			client_version: client_id.to_string(),
