@@ -30,6 +30,7 @@ use libp2p::{tcp, dns, websocket};
 use std::{io, sync::Arc, time::Duration, usize};
 use std::io::prelude::*;
 use webpki;
+// use std::sync::RwLock;
 pub use self::bandwidth::BandwidthSinks;
 
 fn read_cert(path: &str) -> Vec<u8> {
@@ -53,7 +54,18 @@ pub fn build_transport(
 	cert: String,
 	anchors: String,
 ) -> (Boxed<(PeerId, StreamMuxerBox), io::Error>, Arc<bandwidth::BandwidthSinks>) {
-	
+	// lazy_static! {
+	// 	static ref ANCHORS: RwLock<webpki::TLSServerTrustAnchors> = Default::default();
+	// }
+
+	// {
+	// 	let mut tmp_anchors = ANCHORS.write().unwrap();
+	// 	let ca = read_cert(&anchors);
+	// 	let tmp_anchors = vec![webpki::trust_anchor_util::cert_der_as_trust_anchor(ca).unwrap()];
+	// 	let box_ca = Box::new(tmp_anchors);
+	// 	*tmp_anchors = webpki::TLSServerTrustAnchors(&box_ca);
+	// }
+
 	lazy_static! {
 		static ref trust_anchors: Box<Vec<webpki::TrustAnchor<'static>>> = {
 			let ca = include_bytes!("../../../scripts/ca.der");
