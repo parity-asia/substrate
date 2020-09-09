@@ -20,3 +20,4 @@
 export RUST_LOG=info,libp2p=debug
 
 
+target/release/substrate --dev --cert=scripts/alice.der  --anchors=anchors
