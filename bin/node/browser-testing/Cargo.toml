@@ -8,8 +8,7 @@ license = "Apache-2.0"
 
 [dependencies]
 futures-timer = "3.0.2"
-libp2p = { git = "https://github.com/ParityAsia/rust-libp2p", branch = "ca-support" }
-# libp2p = { path = "../../../../asia-rust-libp2p"}
+libp2p = { git = "https://github.com/ParityAsia/rust-libp2p", rev = "ccdd4d5bdeca6831eb" }
 jsonrpc-core = "14.2.0"
 serde = "1.0.106"
 serde_json = "1.0.48"

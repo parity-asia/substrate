@@ -514,10 +514,11 @@ impl ProtocolsHandler for LegacyProtoHandler {
 	type Error = ConnectionKillError;
 	type InboundProtocol = RegisteredProtocol;
 	type OutboundProtocol = RegisteredProtocol;
+	type InboundOpenInfo = ();
 	type OutboundOpenInfo = ();
 
-	fn listen_protocol(&self) -> SubstreamProtocol<Self::InboundProtocol> {
-		SubstreamProtocol::new(self.protocol.clone())
+	fn listen_protocol(&self) -> SubstreamProtocol<Self::InboundProtocol, Self::InboundOpenInfo> {
+		SubstreamProtocol::new(self.protocol.clone(), Default::default())
 	}
 
 	fn inject_fully_negotiated_inbound(

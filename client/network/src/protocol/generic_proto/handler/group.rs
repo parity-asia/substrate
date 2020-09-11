@@ -423,15 +423,16 @@ impl ProtocolsHandler for NotifsHandler {
 	type InboundProtocol = SelectUpgrade<UpgradeCollec<NotificationsIn>, RegisteredProtocol>;
 	type OutboundProtocol = EitherUpgrade<NotificationsOut, RegisteredProtocol>;
 	// Index within the `out_handlers`; None for legacy
+	type InboundOpenInfo = Option<usize>;
 	type OutboundOpenInfo = Option<usize>;
 
-	fn listen_protocol(&self) -> SubstreamProtocol<Self::InboundProtocol> {
+	fn listen_protocol(&self) -> SubstreamProtocol<Self::InboundProtocol, Self::InboundOpenInfo> {
 		let in_handlers = self.in_handlers.iter()
 			.map(|(h, _)| h.listen_protocol().into_upgrade().1)
 			.collect::<UpgradeCollec<_>>();
 
 		let proto = SelectUpgrade::new(in_handlers, self.legacy.listen_protocol().into_upgrade().1);
-		SubstreamProtocol::new(proto)
+		SubstreamProtocol::new(proto, None)
 	}
 
 	fn inject_fully_negotiated_inbound(

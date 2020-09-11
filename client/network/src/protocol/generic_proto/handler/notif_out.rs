@@ -266,9 +266,10 @@ impl ProtocolsHandler for NotifsOutHandler {
 	type Error = void::Void;
 	type InboundProtocol = DeniedUpgrade;
 	type OutboundProtocol = NotificationsOut;
+	type InboundOpenInfo = ();
 	type OutboundOpenInfo = ();
 
-	fn listen_protocol(&self) -> SubstreamProtocol<Self::InboundProtocol> {
+	fn listen_protocol(&self) -> SubstreamProtocol<Self::InboundProtocol, Self::InboundOpenInfo> {
 		SubstreamProtocol::new(DeniedUpgrade)
 	}
 

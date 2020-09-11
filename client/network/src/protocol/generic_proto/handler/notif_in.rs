@@ -147,9 +147,10 @@ impl ProtocolsHandler for NotifsInHandler {
 	type Error = void::Void;
 	type InboundProtocol = NotificationsIn;
 	type OutboundProtocol = DeniedUpgrade;
+	type InboundOpenInfo = ();
 	type OutboundOpenInfo = ();
 
-	fn listen_protocol(&self) -> SubstreamProtocol<Self::InboundProtocol> {
+	fn listen_protocol(&self) -> SubstreamProtocol<Self::InboundProtocol, Self::InboundOpenInfo> {
 		SubstreamProtocol::new(self.in_protocol.clone())
 	}
 

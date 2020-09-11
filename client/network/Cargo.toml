@@ -67,17 +67,18 @@ webpki = { git = "https://github.com/ParityAsia/webpki", branch = "parity-asia"}
 
 [dependencies.libp2p]
 git = "https://github.com/ParityAsia/rust-libp2p"
-branch = "ca-support"
+# rev = "ccdd4d5bdeca6831eb"
+rev = "ccdd4d5bdeca6831eb"
 # path = "../../../asia-rust-libp2p"
 
-default-features = false
-features = ["identify", "kad", "mdns", "mplex", "noise", "ping", "tcp-async-std", "websocket", "yamux", "dns", "wasm-ext"]
+# default-features = false
+# features = ["identify", "kad", "mdns", "mplex", "noise", "ping", "tcp-async-std", "websocket", "yamux", "dns", "wasm-ext"]
 
 [dev-dependencies]
 assert_matches = "1.3"
 env_logger = "0.7.0"
-libp2p = { git = "https://github.com/ParityAsia/rust-libp2p", branch = "ca-support", default-features = false, features = ["secio"] }
-# libp2p = { path = "../../../asia-rust-libp2p", branch = "ca-support", default-features = false, features = ["secio"] }
+libp2p = { git = "https://github.com/ParityAsia/rust-libp2p", rev = "ccdd4d5bdeca6831eb" }
+# libp2p = { path = "../../../asia-rust-libp2p", rev = "ccdd4d5bdeca6831eb", default-features = false, features = ["secio"] }
 
 quickcheck = "0.9.0"
 rand = "0.7.2"
