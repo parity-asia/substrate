@@ -156,6 +156,7 @@ pub trait CliConfiguration<DCV: DefaultConfigurationValues = ()>: Sized {
 	/// `net_config_dir`.
 	fn network_config(
 		&self,
+		basePath: &BasePath,
 		chain_spec: &Box<dyn ChainSpec>,
 		is_dev: bool,
 		net_config_dir: PathBuf,
@@ -163,7 +164,10 @@ pub trait CliConfiguration<DCV: DefaultConfigurationValues = ()>: Sized {
 		node_name: &str,
 		node_key: NodeKeyConfig,
 		default_listen_port: u16,
+		cert: &str,
+		anchors: &str,
 	) -> Result<NetworkConfiguration> {
+		
 		Ok(if let Some(network_params) = self.network_params() {
 			network_params.network_config(
 				chain_spec,
@@ -173,6 +177,8 @@ pub trait CliConfiguration<DCV: DefaultConfigurationValues = ()>: Sized {
 				node_name,
 				node_key,
 				default_listen_port,
+				cert,
+				anchors,
 			)
 		} else {
 			NetworkConfiguration::new(
@@ -180,6 +186,8 @@ pub trait CliConfiguration<DCV: DefaultConfigurationValues = ()>: Sized {
 				client_id,
 				node_key,
 				Some(net_config_dir),
+				cert,
+				anchors,
 			)
 		})
 	}
@@ -266,6 +274,14 @@ pub trait CliConfiguration<DCV: DefaultConfigurationValues = ()>: Sized {
 	/// By default a random name is generated.
 	fn node_name(&self) -> Result<String> {
 		Ok(generate_node_name())
+	}
+
+	fn cert(&self) -> Result<String> {
+		Ok(String::from(""))
+	}
+
+	fn anchors(&self) -> Result<String> {
+		Ok(String::from(""))
 	}
 
 	/// Get the WASM execution method.
@@ -478,6 +494,7 @@ pub trait CliConfiguration<DCV: DefaultConfigurationValues = ()>: Sized {
 			task_executor,
 			transaction_pool: self.transaction_pool()?,
 			network: self.network_config(
+				&base_path,
 				&chain_spec,
 				is_dev,
 				net_config_dir,
@@ -485,6 +502,8 @@ pub trait CliConfiguration<DCV: DefaultConfigurationValues = ()>: Sized {
 				self.node_name()?.as_str(),
 				node_key,
 				DCV::p2p_listen_port(),
+				self.cert()?.as_str(),
+				self.anchors()?.as_str(),
 			)?,
 			keystore: self.keystore_config(&config_dir)?,
 			database: self.database_config(&config_dir, database_cache_size, database)?,

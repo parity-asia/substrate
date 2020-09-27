@@ -122,6 +122,12 @@ pub struct RunCmd {
 	#[structopt(long = "prometheus-external")]
 	pub prometheus_external: bool,
 
+	#[structopt(long = "cert", value_name = "CERT")]
+	pub cert: String,
+
+	#[structopt(long = "anchors", value_name = "ANCHORS")]
+	pub anchors: String,
+
 	/// Specify IPC RPC server path
 	#[structopt(long = "ipc-path", value_name = "PATH")]
 	pub ipc_path: Option<String>,
@@ -474,6 +480,14 @@ impl CliConfiguration for RunCmd {
 		} else {
 			self.shared_params().base_path()
 		})
+	}
+
+	fn cert(&self) -> Result<String> {
+		Ok(self.cert.to_owned())
+	}
+
+	fn anchors(&self) -> Result<String> {
+		Ok(self.anchors.to_owned())
 	}
 }
 

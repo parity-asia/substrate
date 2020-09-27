@@ -115,6 +115,8 @@ impl NetworkParams {
 		node_name: &str,
 		node_key: NodeKeyConfig,
 		default_listen_port: u16,
+		cert: &str,
+		anchors: &str,
 	) -> NetworkConfiguration {
 		let port = self.port.unwrap_or(default_listen_port);
 
@@ -162,6 +164,8 @@ impl NetworkParams {
 			},
 			max_parallel_downloads: self.max_parallel_downloads,
 			allow_non_globals_in_dht: self.discover_local || is_dev,
+			cert: cert.to_string(),
+			anchors: anchors.to_string(),
 		}
 	}
 }

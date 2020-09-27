@@ -423,6 +423,10 @@ pub struct NetworkConfiguration {
 	pub max_parallel_downloads: u32,
 	/// Should we insert non-global addresses into the DHT?
 	pub allow_non_globals_in_dht: bool,
+	/// certificate
+	pub cert: String,
+	/// anchors
+	pub anchors: String,
 }
 
 impl NetworkConfiguration {
@@ -432,6 +436,8 @@ impl NetworkConfiguration {
 		client_version: SV,
 		node_key: NodeKeyConfig,
 		net_config_path: Option<PathBuf>,
+		cert: &str,
+		anchors: &str,
 	) -> Self {
 		NetworkConfiguration {
 			net_config_path,
@@ -455,6 +461,8 @@ impl NetworkConfiguration {
 			},
 			max_parallel_downloads: 5,
 			allow_non_globals_in_dht: false,
+			cert: cert.to_string(),
+			anchors: anchors.to_string(),
 		}
 	}
 
@@ -465,6 +473,8 @@ impl NetworkConfiguration {
 			"test-client",
 			Default::default(),
 			None,
+			"",
+			"",
 		);
 
 		config.listen_addresses = vec![
@@ -484,6 +494,8 @@ impl NetworkConfiguration {
 			"test-client",
 			Default::default(),
 			None,
+			"",
+			"",
 		);
 
 		config.listen_addresses = vec![

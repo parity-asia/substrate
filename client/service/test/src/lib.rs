@@ -211,6 +211,8 @@ fn node_config<G: RuntimeGenesis + 'static, E: ChainSpecExtension + Clone + 'sta
 		"network/test/0.1",
 		Default::default(),
 		None,
+		"",
+		"",
 	);
 
 	network_config.allow_non_globals_in_dht = true;

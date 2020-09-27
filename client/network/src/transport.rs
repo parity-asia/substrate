@@ -26,7 +26,7 @@ use libp2p::{
 };
 #[cfg(not(target_os = "unknown"))]
 use libp2p::{tcp, dns, websocket};
-use std::{io, sync::Arc, time::Duration};
+use std::{io, sync::Arc, time::Duration, path::PathBuf};
 
 pub use self::bandwidth::BandwidthSinks;
 
@@ -41,7 +41,9 @@ pub fn build_transport(
 	keypair: identity::Keypair,
 	memory_only: bool,
 	wasm_external_transport: Option<wasm_ext::ExtTransport>,
-	use_yamux_flow_control: bool
+	use_yamux_flow_control: bool,
+	cert: String,
+	anchors: String,
 ) -> (Boxed<(PeerId, StreamMuxerBox), io::Error>, Arc<BandwidthSinks>) {
 	// Build the base layer of the transport.
 	let transport = if let Some(t) = wasm_external_transport {
