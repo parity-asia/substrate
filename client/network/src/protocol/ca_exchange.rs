@@ -32,6 +32,7 @@ pub struct CaExchangeConfig {
     anchor: CA,
     cert: CA,
 }
+
 impl CaExchangeConfig {
     pub fn new(anchor: CA, cert: CA) -> Self {
         Self { anchor: anchor, cert: cert }

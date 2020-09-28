@@ -62,6 +62,7 @@ mod generic_proto;
 pub mod message;
 pub mod event;
 pub mod sync;
+pub mod ca_exchange;
 
 pub use generic_proto::{NotificationsSink, Ready, NotifsHandlerError, LegacyConnectionKillError};
 

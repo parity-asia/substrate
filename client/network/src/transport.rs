@@ -24,10 +24,11 @@ use libp2p::{
 	},
 	mplex, identity, bandwidth, wasm_ext, noise
 };
+use crate::protocol::ca_exchange::{CA, CaExchangeConfig};
+
 #[cfg(not(target_os = "unknown"))]
 use libp2p::{tcp, dns, websocket};
 use std::{io, sync::Arc, time::Duration, path::PathBuf};
-
 pub use self::bandwidth::BandwidthSinks;
 
 /// Builds the transport that serves as a common ground for all connections.
@@ -42,8 +43,8 @@ pub fn build_transport(
 	memory_only: bool,
 	wasm_external_transport: Option<wasm_ext::ExtTransport>,
 	use_yamux_flow_control: bool,
-	cert: String,
-	anchors: String,
+	cert: CA,
+	anchors: CA,
 ) -> (Boxed<(PeerId, StreamMuxerBox), io::Error>, Arc<BandwidthSinks>) {
 	// Build the base layer of the transport.
 	let transport = if let Some(t) = wasm_external_transport {
@@ -72,6 +73,8 @@ pub fn build_transport(
 	});
 
 	let (transport, bandwidth) = bandwidth::BandwidthLogging::new(transport);
+	// CA config setup
+
 
 	let authentication_config = {
 		// For more information about these two panics, see in "On the Importance of
@@ -123,6 +126,12 @@ pub fn build_transport(
 			.map_inbound(move |muxer| core::muxing::StreamMuxerBox::new(muxer))
 			.map_outbound(move |muxer| core::muxing::StreamMuxerBox::new(muxer))
 	};
+
+	let transport = transport.and_then(
+		move |socket, _| {
+			CaExchangeConfig::new(anchors, cert).handshake(socket)
+		}
+	);
 
 	let transport = transport.upgrade(upgrade::Version::V1)
 		.authenticate(authentication_config)

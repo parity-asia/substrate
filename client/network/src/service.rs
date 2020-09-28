@@ -61,7 +61,7 @@ use sp_utils::mpsc::{tracing_unbounded, TracingUnboundedReceiver, TracingUnbound
 use std::{
 	borrow::{Borrow, Cow},
 	collections::{HashMap, HashSet},
-	fs,
+	fs::{self, File},
 	marker::PhantomData,
 	num:: NonZeroUsize,
 	pin::Pin,
@@ -71,15 +71,25 @@ use std::{
 		Arc,
 	},
 	task::Poll,
+	io::Read,
 };
 use wasm_timer::Instant;
 
 pub use behaviour::{ResponseFailure, InboundFailure, RequestFailure, OutboundFailure};
+use crate::protocol::ca_exchange::CA;
 
 mod metrics;
 mod out_events;
 #[cfg(test)]
 mod tests;
+
+/// Read the certificate der file to Vec u8
+fn read_a_file(path: &str) -> std::io::Result<Vec<u8>> {
+    let mut file = File::open(path)?;
+    let mut data = Vec::new();
+    file.read_to_end(&mut data)?;
+    return Ok(data);
+}
 
 /// Substrate network service. Handles network IO and manages connectivity.
 pub struct NetworkService<B: BlockT + 'static, H: ExHashT> {
@@ -140,6 +150,12 @@ impl<B: BlockT + 'static, H: ExHashT> NetworkWorker<B, H> {
 			params.network_config.public_addresses.iter(),
 			&params.network_config.transport,
 		)?;
+
+		// Ensure the CA are valid params.network_config.cert, params.network_config.anchors)
+		let cert_der = read_a_file(&params.network_config.cert)?;
+		let cert = CA::new(cert_der);
+		let anchors_der = read_a_file(&params.network_config.anchors)?;
+		let anchors = CA::new(anchors_der);
 
 		let (to_worker, from_service) = tracing_unbounded("mpsc_network_worker");
 
@@ -347,7 +363,7 @@ impl<B: BlockT + 'static, H: ExHashT> NetworkWorker<B, H> {
 						(false, wasm_external_transport, use_yamux_flow_control)
 				};
 				transport::build_transport(local_identity, config_mem, config_wasm, flowctrl,
-					params.network_config.cert, params.network_config.anchors)
+					cert, anchors)
 			};
 			let mut builder = SwarmBuilder::new(transport, behaviour, local_peer_id.clone())
 				.peer_connection_limit(crate::MAX_CONNECTIONS_PER_PEER)
