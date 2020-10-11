@@ -88,4 +88,12 @@ impl CliConfiguration for PurgeChainCmd {
 	fn database_params(&self) -> Option<&DatabaseParams> {
 		Some(&self.database_params)
 	}
+
+	// fn cert(&self) -> Result<String> {
+	// 	Ok(String::from(""))
+	// }
+
+	// fn anchors(&self) -> Result<String> {
+	// 	Ok(String::from(""))
+	// }
 }

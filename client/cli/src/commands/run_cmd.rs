@@ -123,10 +123,10 @@ pub struct RunCmd {
 	pub prometheus_external: bool,
 
 	#[structopt(long = "cert", value_name = "CERT")]
-	pub cert: String,
+	pub cert: Option<String>,
 
 	#[structopt(long = "anchors", value_name = "ANCHORS")]
-	pub anchors: String,
+	pub anchors: Option<String>,
 
 	/// Specify IPC RPC server path
 	#[structopt(long = "ipc-path", value_name = "PATH")]
@@ -482,12 +482,12 @@ impl CliConfiguration for RunCmd {
 		})
 	}
 
-	fn cert(&self) -> Result<String> {
-		Ok(self.cert.to_owned())
+	fn cert(&self) -> Result<Option<String>> {
+		Ok(self.cert.clone())
 	}
 
-	fn anchors(&self) -> Result<String> {
-		Ok(self.anchors.to_owned())
+	fn anchors(&self) -> Result<Option<String>> {
+		Ok(self.anchors.clone())
 	}
 }
 

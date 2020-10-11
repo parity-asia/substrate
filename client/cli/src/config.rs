@@ -276,12 +276,12 @@ pub trait CliConfiguration<DCV: DefaultConfigurationValues = ()>: Sized {
 		Ok(generate_node_name())
 	}
 
-	fn cert(&self) -> Result<String> {
-		Ok(String::from(""))
+	fn cert(&self) -> Result<Option<String>> {
+		Ok(None)
 	}
 
-	fn anchors(&self) -> Result<String> {
-		Ok(String::from(""))
+	fn anchors(&self) -> Result<Option<String>> {
+		Ok(None)
 	}
 
 	/// Get the WASM execution method.
@@ -502,8 +502,8 @@ pub trait CliConfiguration<DCV: DefaultConfigurationValues = ()>: Sized {
 				self.node_name()?.as_str(),
 				node_key,
 				DCV::p2p_listen_port(),
-				self.cert()?.as_str(),
-				self.anchors()?.as_str(),
+				&self.cert()?.unwrap_or("".to_string()),
+				&self.anchors()?.unwrap_or("".to_string()),
 			)?,
 			keystore: self.keystore_config(&config_dir)?,
 			database: self.database_config(&config_dir, database_cache_size, database)?,
