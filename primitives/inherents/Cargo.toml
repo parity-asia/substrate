@@ -19,7 +19,7 @@ parking_lot = { version = "0.11.1", optional = true }
 sp-std = { version = "3.0.0", default-features = false, path = "../std" }
 sp-core = { version = "3.0.0", default-features = false, path = "../core" }
 codec = { package = "parity-scale-codec", version = "2.0.0", default-features = false, features = ["derive"] }
-thiserror = { version = "1.0.21", optional = true }
+thiserror = { version = "1.0.24", optional = true }
 
 [features]
 default = [ "std" ]
