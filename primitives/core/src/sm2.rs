@@ -51,7 +51,7 @@ pub const CRYPTO_ID: CryptoTypeId = CryptoTypeId(*b"csm2");
 type Seed = [u8; 32];
 
 /// the SM2 conpressed key.
-#[derive(Clone, Encode, Decode)]
+#[derive(Clone, Encode, Decode, PassByInner)]
 pub struct Public([u8; 33]);
 
 impl PartialOrd for Public {
@@ -109,10 +109,8 @@ impl Public {
 		}
 	}
 
-	pub fn into_b32(self) -> [u8; 32] {
-		let mut buf = [0u8; 32];
-		buf.copy_from_slice(&self.0[1..]);
-		buf
+	pub fn into_slice(&self) -> &[u8; 33] {
+		&self.0
 	}
 }
 
@@ -130,6 +128,18 @@ impl TraitPublic for Public {
 
 	fn to_public_crypto_pair(&self) -> CryptoTypePublicPair {
 		CryptoTypePublicPair(CRYPTO_ID, self.to_raw_vec())
+	}
+}
+
+impl From<Public> for CryptoTypePublicPair {
+	fn from(key: Public) -> Self {
+		(&key).into()
+	}
+}
+
+impl From<&Public> for CryptoTypePublicPair {
+	fn from(key: &Public) -> Self {
+		CryptoTypePublicPair(CRYPTO_ID, key.to_raw_vec())
 	}
 }
 
@@ -187,14 +197,18 @@ impl std::fmt::Display for Public {
 	}
 }
 
-#[cfg(feature = "std")]
-impl std::fmt::Debug for Public {
+impl sp_std::fmt::Debug for Public {
+	#[cfg(feature = "std")]
 	fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
 		let s = self.to_ss58check();
 		write!(f, "{} ({}...)", crate::hexdisplay::HexDisplay::from(&self.as_ref()), &s[0..8])
 	}
-}
 
+	#[cfg(not(feature = "std"))]
+	fn fmt(&self, _: &mut sp_std::fmt::Formatter) -> sp_std::fmt::Result {
+		Ok(())
+	}
+}
 
 #[cfg(feature = "std")]
 impl Serialize for Public {
@@ -314,10 +328,15 @@ impl AsMut<[u8]> for Signature {
 	}
 }
 
-#[cfg(feature = "std")]
-impl std::fmt::Debug for Signature {
-	fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+impl sp_std::fmt::Debug for Signature {
+	#[cfg(feature = "std")]
+	fn fmt(&self, f: &mut std::fmt::Formatter) -> sp_std::fmt::Result {
 		write!(f, "{}", crate::hexdisplay::HexDisplay::from(&self.0.as_ref()))
+	}
+
+	#[cfg(not(feature = "std"))]
+	fn fmt(&self, _: &mut sp_std::fmt::Formatter) -> sp_std::fmt::Result {
+		Ok(())
 	}
 }
 
@@ -526,23 +545,3 @@ impl CryptoType for Signature {
 impl CryptoType for Pair {
 	type Pair = Pair;
 }
-
-
-
-
-// impl IdentifyAccount for Public {
-// 	type AccountId = Self;
-// 	fn into_account(self) -> Self { self }
-// }
-
-// impl Verify for Signature {
-// 	type Signer = Public;
-// 	fn verify<L: Lazy<[u8]>>(&self, mut msg: L, signer: &Public) -> bool {
-// 		let signer = signer.as_ref();
-// 		io::sca::sm2_verify(self, msg.get(), signer)
-// 	}
-// }
-
-// impl PassBy for Signature {
-// 	type PassBy = Codec<Self>;
-// }

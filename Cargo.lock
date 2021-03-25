@@ -1175,6 +1175,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7a81dae078cea95a014a339291cec439d2f232ebe854a9d672b796c6afafa9b7"
 
 [[package]]
+name = "cryptape-sm"
+version = "0.3.0"
+source = "git+https://github.com/hammeWang/libsm.git?rev=a85974c#a85974c1d58b8be62e8ca581f148db3e6756d30c"
+dependencies = [
+ "arrayref",
+ "byteorder",
+ "lazy_static",
+ "num-bigint",
+ "num-integer",
+ "num-traits",
+ "rand 0.7.3",
+]
+
+[[package]]
 name = "crypto-mac"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -8591,6 +8605,7 @@ dependencies = [
  "blake2-rfc",
  "byteorder",
  "criterion",
+ "cryptape-sm",
  "dyn-clonable",
  "ed25519-dalek",
  "futures 0.3.12",

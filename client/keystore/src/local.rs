@@ -38,7 +38,7 @@ use sp_keystore::{
 	SyncCryptoStore,
 	vrf::{VRFTranscriptData, VRFSignature, make_transcript},
 };
-use sp_application_crypto::{ed25519, sr25519, ecdsa, AppPair, AppKey, IsWrappedBy};
+use sp_application_crypto::{ed25519, sr25519, ecdsa, sm2, AppPair, AppKey, IsWrappedBy};
 
 use crate::{Result, Error};
 
@@ -109,6 +109,19 @@ impl CryptoStore for LocalKeystore {
 		SyncCryptoStore::ecdsa_generate_new(self, id, seed)
 	}
 
+	async fn sm2_public_keys(&self, id: KeyTypeId) -> Vec<sm2::Public> {
+		SyncCryptoStore::sm2_public_keys(self, id)
+	}
+
+	async fn sm2_generate_new(
+		&self,
+		id: KeyTypeId,
+		seed: Option<&str>,
+	) -> std::result::Result<sm2::Public, TraitError> {
+		SyncCryptoStore::sm2_generate_new(self, id, seed)
+	}
+
+
 	async fn insert_unknown(&self, id: KeyTypeId, suri: &str, public: &[u8]) -> std::result::Result<(), ()> {
 		SyncCryptoStore::insert_unknown(self, id, suri, public)
 	}
@@ -154,7 +167,8 @@ impl SyncCryptoStore for LocalKeystore {
 			.fold(Vec::new(), |mut v, k| {
 				v.push(CryptoTypePublicPair(sr25519::CRYPTO_ID, k.clone()));
 				v.push(CryptoTypePublicPair(ed25519::CRYPTO_ID, k.clone()));
-				v.push(CryptoTypePublicPair(ecdsa::CRYPTO_ID, k));
+				v.push(CryptoTypePublicPair(ecdsa::CRYPTO_ID, k.clone()));
+				v.push(CryptoTypePublicPair(sm2::CRYPTO_ID, k));
 				v
 			}))
 	}
@@ -197,10 +211,18 @@ impl SyncCryptoStore for LocalKeystore {
 					.key_pair_by_type::<ecdsa::Pair>(&pub_key, id)
 					.map_err(|e| TraitError::from(e))?;
 				key_pair.map(|k| k.sign(msg).encode()).map(Ok).transpose()
-			}
+			},
+			sm2::CRYPTO_ID => {
+				let pub_key = sm2::Public::from_slice(key.1.as_slice());
+				let key_pair = self.0.read()
+					.key_pair_by_type::<sm2::Pair>(&pub_key, id)
+					.map_err(|e| TraitError::from(e))?;
+				key_pair.map(|k| k.sign(msg).encode()).map(Ok).transpose()
+			},
 			_ => Err(TraitError::KeyNotSupported(id))
 		}
 	}
+	
 
 	fn sr25519_public_keys(&self, key_type: KeyTypeId) -> Vec<sr25519::Public> {
 		self.0.read().raw_public_keys(key_type)
@@ -266,6 +288,29 @@ impl SyncCryptoStore for LocalKeystore {
 		let pair = match seed {
 			Some(seed) => self.0.write().insert_ephemeral_from_seed_by_type::<ecdsa::Pair>(seed, id),
 			None => self.0.write().generate_by_type::<ecdsa::Pair>(id),
+		}.map_err(|e| -> TraitError { e.into() })?;
+
+		Ok(pair.public())
+	}
+
+	fn sm2_public_keys(&self, key_type: KeyTypeId) -> Vec<sm2::Public> {
+		self.0.read().raw_public_keys(key_type)
+			.map(|v| {
+				v.into_iter()
+					.map(|k| sm2::Public::from_slice(k.as_slice()))
+					.collect()
+			})
+			.unwrap_or_default()
+	}
+
+	fn sm2_generate_new(
+		&self,
+		id: KeyTypeId,
+		seed: Option<&str>,
+	) -> std::result::Result<sm2::Public, TraitError> {
+		let pair = match seed {
+			Some(seed) => self.0.write().insert_ephemeral_from_seed_by_type::<sm2::Pair>(seed, id),
+			None => self.0.write().generate_by_type::<sm2::Pair>(id),
 		}.map_err(|e| -> TraitError { e.into() })?;
 
 		Ok(pair.public())

@@ -37,7 +37,7 @@ use tracing;
 
 #[cfg(feature = "std")]
 use sp_core::{
-	crypto::Pair,
+	crypto::{Pair, Public},
 	traits::{CallInWasmExt, TaskExecutorExt, RuntimeSpawnExt},
 	offchain::{OffchainExt, TransactionPoolExt},
 	hexdisplay::HexDisplay,
@@ -48,6 +48,7 @@ use sp_keystore::{KeystoreExt, SyncCryptoStore};
 
 use sp_core::{
 	OpaquePeerId, crypto::KeyTypeId, ed25519, sr25519, ecdsa, H256, LogLevel,
+	sm2::{self, Public as Sm2Public, Signature as Sm2Signature},
 	offchain::{
 		Timestamp, HttpRequestId, HttpRequestStatus, HttpError, StorageKind, OpaqueNetworkState,
 	},
@@ -766,6 +767,58 @@ pub trait Crypto {
 		let pubkey = secp256k1::recover(&secp256k1::Message::parse(msg), &rs, &v)
 			.map_err(|_| EcdsaVerifyError::BadSignature)?;
 		Ok(pubkey.serialize_compressed())
+	}
+
+	/// Returns all `sm2` public keys for the given key id from the keystore.
+	fn sm2_public_keys(&mut self, id: KeyTypeId) -> Vec<sm2::Public> {
+		let keystore = &***self.extension::<KeystoreExt>()
+			.expect("No `keystore` associated for the current context!");
+		SyncCryptoStore::sm2_public_keys(keystore, id)
+	}
+
+	/// Generate a `sm2` key for the given key type using an optional `seed` and
+	/// store it in the keystore.
+	///
+	/// The `seed` needs to be a valid utf8.
+	///
+	/// Returns the public key.
+	fn sm2_generate(&mut self, id: KeyTypeId, seed: Option<Vec<u8>>) -> sm2::Public {
+		let seed = seed.as_ref().map(|s| std::str::from_utf8(&s).expect("Seed is valid utf8!"));
+		let keystore = &***self.extension::<KeystoreExt>()
+			.expect("No `keystore` associated for the current context!");
+		SyncCryptoStore::sm2_generate_new(keystore, id, seed)
+			.expect("`ecdsa_generate` failed")
+	}
+
+	/// Sign the given `msg` with the `sm2` key that corresponds to the given public key and
+	/// key type in the keystore.
+	///
+	/// Returns the signature.
+	fn sm2_sign(
+		&mut self,
+		id: KeyTypeId,
+		pub_key: &sm2::Public,
+		msg: &[u8],
+	) -> Option<sm2::Signature> {
+		let keystore = &***self.extension::<KeystoreExt>()
+			.expect("No `keystore` associated for the current context!");
+		SyncCryptoStore::sign_with(keystore, id, &pub_key.into(), msg)
+			.ok()
+			.flatten()
+			.map(|sig| sm2::Signature::from_slice(sig.as_slice()))
+	}
+
+	fn sm2_verify(
+		sig: &Sm2Signature,
+		msg: &[u8],
+		pubkey: &sm2::Public,
+	) -> bool {
+		let pk = Sm2Public::from_slice(&sig.into_sm2_pk());
+		if &pk != pubkey {
+			return false;
+		}
+
+		sm2::Pair::verify(&sig, msg, &pubkey)
 	}
 }
 

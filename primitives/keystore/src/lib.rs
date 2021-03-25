@@ -24,7 +24,7 @@ use async_trait::async_trait;
 use futures::{executor::block_on, future::join_all};
 use sp_core::{
 	crypto::{KeyTypeId, CryptoTypePublicPair},
-	ed25519, sr25519, ecdsa,
+	ed25519, sr25519, ecdsa, sm2,
 };
 use crate::vrf::{VRFTranscriptData, VRFSignature};
 
@@ -84,6 +84,17 @@ pub trait CryptoStore: Send + Sync {
 		id: KeyTypeId,
 		seed: Option<&str>,
 	) -> Result<ecdsa::Public, Error>;
+
+	
+	/// Returns all sm2 public keys for the given key type.
+	async fn sm2_public_keys(&self, id: KeyTypeId) -> Vec<sm2::Public>;
+
+	/// Generate a new sm2 key pair for the given key type and an optional seed
+	async fn sm2_generate_new(
+		&self,
+		id: KeyTypeId,
+		seed: Option<&str>,
+	) -> Result<sm2::Public, Error>;
 
 	/// Insert a new key. This doesn't require any known of the crypto; but a public key must be
 	/// manually provided.
@@ -246,6 +257,16 @@ pub trait SyncCryptoStore: CryptoStore + Send + Sync {
 		id: KeyTypeId,
 		seed: Option<&str>,
 	) -> Result<ecdsa::Public, Error>;
+
+	/// Returns all sm2 public keys for the given key type.
+	fn sm2_public_keys(&self, id: KeyTypeId) -> Vec<sm2::Public>;
+
+	/// Generate a new sm2 key pair for the given key type and an optional seed
+	fn sm2_generate_new(
+		&self,
+		id: KeyTypeId,
+		seed: Option<&str>,
+	) -> Result<sm2::Public, Error>;	
 
 	/// Insert a new key. This doesn't require any known of the crypto; but a public key must be
 	/// manually provided.

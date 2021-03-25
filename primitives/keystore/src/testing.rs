@@ -20,7 +20,7 @@
 use sp_core::crypto::KeyTypeId;
 use sp_core::{
 	crypto::{Pair, Public, CryptoTypePublicPair},
-	ed25519, sr25519, ecdsa,
+	ed25519, sr25519, ecdsa, sm2,
 };
 use crate::{
 	{CryptoStore, SyncCryptoStorePtr, Error, SyncCryptoStore},
@@ -67,6 +67,14 @@ impl KeyStore {
 			)
 	}
 
+	fn sm2_key_pair(&self, id: KeyTypeId, pub_key: &sm2::Public) -> Option<sm2::Pair> {
+		self.keys.read().get(&id)
+			.and_then(|inner|
+				inner.get(pub_key.as_slice())
+					.map(|s| sm2::Pair::from_string(s, None).expect("`ecdsa` seed slice is valid"))
+			)
+	}
+
 }
 
 #[async_trait]
@@ -109,6 +117,18 @@ impl CryptoStore for KeyStore {
 		seed: Option<&str>,
 	) -> Result<ecdsa::Public, Error> {
 		SyncCryptoStore::ecdsa_generate_new(self, id, seed)
+	}
+
+	async fn sm2_public_keys(&self, id: KeyTypeId) -> Vec<sm2::Public> {
+		SyncCryptoStore::sm2_public_keys(self, id)
+	}
+
+	async fn sm2_generate_new(
+		&self,
+		id: KeyTypeId,
+		seed: Option<&str>,
+	) -> Result<sm2::Public, Error> {
+		SyncCryptoStore::sm2_generate_new(self, id, seed)
 	}
 
 	async fn insert_unknown(&self, id: KeyTypeId, suri: &str, public: &[u8]) -> Result<(), ()> {
@@ -255,6 +275,37 @@ impl SyncCryptoStore for KeyStore {
 		}
 	}
 
+	fn sm2_public_keys(&self, id: KeyTypeId) -> Vec<sm2::Public> {
+		self.keys.read().get(&id)
+			.map(|keys|
+				keys.values()
+					.map(|s| sm2::Pair::from_string(s, None).expect("`ecdsa` seed slice is valid"))
+					.map(|p| p.public())
+					.collect()
+			)
+			.unwrap_or_default()
+	}
+
+	fn sm2_generate_new(
+		&self,
+		id: KeyTypeId,
+		seed: Option<&str>,
+	) -> Result<sm2::Public, Error> {
+		match seed {
+			Some(seed) => {
+				let pair = sm2::Pair::from_string(seed, None)
+					.map_err(|_| Error::ValidationError("Generates an `ecdsa` pair.".to_owned()))?;
+				self.keys.write().entry(id).or_default().insert(pair.public().to_raw_vec(), seed.into());
+				Ok(pair.public())
+			},
+			None => {
+				let (pair, phrase, _) = sm2::Pair::generate_with_phrase(None);
+				self.keys.write().entry(id).or_default().insert(pair.public().to_raw_vec(), phrase);
+				Ok(pair.public())
+			}
+		}
+	}
+
 	fn insert_unknown(&self, id: KeyTypeId, suri: &str, public: &[u8]) -> Result<(), ()> {
 		self.keys.write().entry(id).or_default().insert(public.to_owned(), suri.to_string());
 		Ok(())
@@ -299,6 +350,12 @@ impl SyncCryptoStore for KeyStore {
 			ecdsa::CRYPTO_ID => {
 				let key_pair = self
 					.ecdsa_key_pair(id, &ecdsa::Public::from_slice(key.1.as_slice()));
+
+				key_pair.map(|k| k.sign(msg).encode()).map(Ok).transpose()
+			},
+			sm2::CRYPTO_ID => {
+				let key_pair = self
+					.sm2_key_pair(id, &sm2::Public::from_slice(key.1.as_slice()));
 
 				key_pair.map(|k| k.sign(msg).encode()).map(Ok).transpose()
 			}

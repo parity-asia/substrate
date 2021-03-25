@@ -43,6 +43,7 @@ pub use sp_std::{
 pub mod ed25519;
 pub mod sr25519;
 pub mod ecdsa;
+pub mod sm2;
 mod traits;
 
 pub use traits::*;

@@ -58,7 +58,7 @@ pub mod hexdisplay;
 pub mod crypto;
 
 pub mod u32_trait;
-
+pub mod sm2;
 pub mod ed25519;
 pub mod sr25519;
 pub mod ecdsa;

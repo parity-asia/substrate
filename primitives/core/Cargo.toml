@@ -51,7 +51,7 @@ hex = { version = "0.4", default-features = false, optional = true }
 twox-hash = { version = "1.5.0", default-features = false, optional = true }
 libsecp256k1 = { version = "0.3.2", default-features = false, features = ["hmac"], optional = true }
 merlin = { version = "2.0", default-features = false, optional = true }
-
+libsm = { package = "cryptape-sm", git = "https://github.com/hammeWang/libsm.git", rev = "a85974c", optional = true }
 sp-runtime-interface = { version = "3.0.0", default-features = false, path = "../runtime-interface" }
 
 [dev-dependencies]
@@ -130,4 +130,5 @@ full_crypto = [
 	"libsecp256k1",
 	"sp-runtime-interface/disable_target_static_assertions",
 	"merlin",
+	"libsm",
 ]
