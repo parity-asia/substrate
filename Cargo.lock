@@ -2506,7 +2506,7 @@ dependencies = [
  "httparse",
  "httpdate",
  "itoa",
- "pin-project 1.0.4",
+ "pin-project 1.0.8",
  "socket2",
  "tokio 0.2.25",
  "tower-service",
@@ -3075,7 +3075,7 @@ dependencies = [
  "libp2p-yamux",
  "parity-multiaddr",
  "parking_lot 0.11.1",
- "pin-project 1.0.4",
+ "pin-project 1.0.8",
  "smallvec 1.6.1",
  "wasm-timer",
 ]
@@ -3100,7 +3100,7 @@ dependencies = [
  "multistream-select",
  "parity-multiaddr",
  "parking_lot 0.11.1",
- "pin-project 1.0.4",
+ "pin-project 1.0.8",
  "prost",
  "prost-build",
  "rand 0.7.3",
@@ -3323,7 +3323,7 @@ checksum = "6ce3374f3b28162db9d3442c9347c4f14cb01e8290052615c7d341d40eae0599"
 dependencies = [
  "futures 0.3.12",
  "log",
- "pin-project 1.0.4",
+ "pin-project 1.0.8",
  "rand 0.7.3",
  "salsa20",
  "sha3",
@@ -3854,7 +3854,7 @@ dependencies = [
  "bytes 1.0.1",
  "futures 0.3.12",
  "log",
- "pin-project 1.0.4",
+ "pin-project 1.0.8",
  "smallvec 1.6.1",
  "unsigned-varint 0.6.0",
 ]
@@ -5869,11 +5869,11 @@ dependencies = [
 
 [[package]]
 name = "pin-project"
-version = "1.0.4"
+version = "1.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "95b70b68509f17aa2857863b6fa00bf21fc93674c7a8893de2f469f6aa7ca2f2"
+checksum = "576bc800220cc65dac09e99e97b08b358cfab6e17078de8dc5fee223bd2d0c08"
 dependencies = [
- "pin-project-internal 1.0.4",
+ "pin-project-internal 1.0.8",
 ]
 
 [[package]]
@@ -5889,9 +5889,9 @@ dependencies = [
 
 [[package]]
 name = "pin-project-internal"
-version = "1.0.4"
+version = "1.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "caa25a6393f22ce819b0f50e0be89287292fda8d425be38ee0ca14c4931d9e71"
+checksum = "6e8fe8163d14ce7f0cdac2e040116f22eac817edabff0be91e8aff7e9accf389"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -7305,7 +7305,7 @@ dependencies = [
  "log",
  "parity-scale-codec",
  "parking_lot 0.11.1",
- "pin-project 1.0.4",
+ "pin-project 1.0.8",
  "rand 0.7.3",
  "sc-block-builder",
  "sc-client-api",
@@ -7477,7 +7477,7 @@ dependencies = [
  "nohash-hasher",
  "parity-scale-codec",
  "parking_lot 0.11.1",
- "pin-project 1.0.4",
+ "pin-project 1.0.8",
  "prost",
  "prost-build",
  "quickcheck",
@@ -7724,7 +7724,7 @@ dependencies = [
  "parity-scale-codec",
  "parity-util-mem",
  "parking_lot 0.11.1",
- "pin-project 1.0.4",
+ "pin-project 1.0.8",
  "rand 0.7.3",
  "sc-block-builder",
  "sc-chain-spec",
@@ -7855,7 +7855,7 @@ dependencies = [
  "libp2p",
  "log",
  "parking_lot 0.11.1",
- "pin-project 1.0.4",
+ "pin-project 1.0.8",
  "rand 0.7.3",
  "serde",
  "serde_json",
